@@ -817,7 +817,15 @@ footer{background:#050f08;padding:64px 32px 28px;color:rgba(255,255,255,.5)}
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
+  (function(){
+    emailjs.init("service_sndnje9"); // from EmailJS dashboard
+  })();
+</script>
+
+<script>
+
 function toggleMenu(){
   const m=document.getElementById("mobileMenu");
   m.classList.toggle("open");
@@ -866,5 +874,6 @@ function submitForm(event) {
     });
 }
 </script>
+
 </body>
 </html>
