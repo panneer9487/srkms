@@ -734,12 +734,12 @@ footer{background:#050f08;padding:64px 32px 28px;color:rgba(255,255,255,.5)}
       <div class="contact-form">
         <h3>Send an Enquiry</h3>
         <div class="form-row">
-          <div class="fg"><label>Parent / Guardian Name</label><input type="text" placeholder="Your full name"></div>
-          <div class="fg"><label>Mobile Number</label><input type="tel" placeholder="+91 00000 00000"></div>
+          <div class="fg" name="parent_guardian_name"><label>Parent / Guardian Name</label><input type="text" placeholder="Your full name"></div>
+          <div class="fg" name="mobile_number"><label>Mobile Number</label><input type="tel" placeholder="+91 00000 00000"></div>
         </div>
-        <div class="fg"><label>Student Name</label><input type="text" placeholder="Student's name"></div>
+        <div class="fg" name="student_name"><label>Student Name</label><input type="text" placeholder="Student's name"></div>
         <div class="form-row">
-          <div class="fg"><label>Applying for Class</label>
+          <div class="fg" name="applying_for_class"><label>Applying for Class</label>
             <select>
               <option value="">Select Class</option>
               <option>LKG</option><option>UKG</option>
@@ -749,11 +749,11 @@ footer{background:#050f08;padding:64px 32px 28px;color:rgba(255,255,255,.5)}
               <option>Class X</option><option>Class XI</option><option>Class XII</option>
             </select>
           </div>
-          <div class="fg"><label>Academic Year</label>
+          <div class="fg" name="academic_year"><label>Academic Year</label>
             <select><option>2025–26</option><option>2026–27</option></select>
           </div>
         </div>
-        <div class="fg"><label>Your Message</label><textarea placeholder="Any questions about admissions, fees, facilities, or the school..."></textarea></div>
+        <div class="fg" name="your_message"><label>Your Message</label><textarea placeholder="Any questions about admissions, fees, facilities, or the school..."></textarea></div>
         <button class="btn-green" style="width:100%;font-size:.9rem;padding:14px" onclick="submitForm()"><i class="fas fa-paper-plane" style="margin-right:8px"></i>Submit Enquiry</button>
       </div>
     </div>
@@ -838,13 +838,32 @@ window.addEventListener("scroll",()=>{
     if(a.getAttribute("href")==="#"+current)a.classList.add("active");
   });
 });
-function submitForm(){
-  const inputs=document.querySelectorAll(".contact-form input, .contact-form select");
-  let filled=true;
-  inputs.forEach(i=>{if(!i.value.trim())filled=false});
-  if(!filled){alert("Please fill in all required fields.");return;}
-  alert("Thank you for your enquiry! Our admissions team will contact you within 24 hours.");
-  document.querySelectorAll(".contact-form input, .contact-form textarea, .contact-form select").forEach(el=>el.value="");
+function submitForm(event) {
+  event.preventDefault();
+
+  const form = document.querySelector(".contact-form");
+  const inputs = form.querySelectorAll("input, select, textarea");
+
+  let filled = true;
+  inputs.forEach(i => {
+    if (i.hasAttribute("required") && !i.value.trim()) {
+      filled = false;
+    }
+  });
+
+  if (!filled) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  emailjs.sendForm("service_sndnje9", "template_8e8bb2i", form)
+    .then(function () {
+      alert("Thank you! Enquiry sent successfully. Our admissions team will contact you within 24 hours.");
+      form.reset();
+    }, function (error) {
+      alert("Failed to send enquiry. Please try again.");
+      console.error(error);
+    });
 }
 </script>
 </body>
